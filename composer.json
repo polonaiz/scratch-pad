@@ -1,5 +1,6 @@
 {
   "name": "polonaiz/scratch-pad",
+  "description": "",
   "type": "library",
   "authors": [
     {
@@ -20,9 +21,7 @@
       "ScratchPad\\": [
         "src/ScratchPad",
         "test/ScratchPad"
-      ],
-      "Thrift\\": "src/Thrift",
-      "Scribe\\": "src/Thrift/Packages/Scribe"
+      ]
     }
   },
   "scripts": {
