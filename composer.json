@@ -1,0 +1,27 @@
+{
+  "name": "polonaiz/scratch-pad",
+  "type": "library",
+  "authors": [
+    {
+      "name": "polonaiz",
+      "email": "polonaiz@gmail.com"
+    }
+  ],
+  "require": {
+    "ext-json": "*",
+    "ext-curl": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "7.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "ScratchPad\\": [
+        "src/ScratchPad",
+        "test/ScratchPad"
+      ],
+      "Thrift\\": "src/Thrift",
+      "Scribe\\": "src/Thrift/Packages/Scribe"
+    }
+  }
+}
