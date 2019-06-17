@@ -36,6 +36,13 @@ class Logger
         self::log($mergedMessage);
     }
 
+    public static function notice(array $message)
+    {
+        $mergedMessage['level'] = 'notice';
+        $mergedMessage += $message;
+        self::log($mergedMessage);
+    }
+
     public static function warning(array $message)
     {
         $mergedMessage['level'] = 'warning';
