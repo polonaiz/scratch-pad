@@ -5,7 +5,7 @@ namespace ScratchPad\Logger;
 interface LoggerInterface
 {
     /**
-     * @param array $values
+     * @param array $message
      */
-    public function log(array $values);
+    public function log(array $message);
 }
