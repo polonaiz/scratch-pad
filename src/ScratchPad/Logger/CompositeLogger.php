@@ -32,7 +32,9 @@ class CompositeLogger implements LoggerInterface
         foreach ($mergedMessage as $key => &$value)
         {
             if (is_callable($value))
+            {
                 $value = $value();
+            }
         }
 
         //add key-value to merged
@@ -52,6 +54,7 @@ class CompositeLogger implements LoggerInterface
     }
 
     private static $stamper;
+
     public static function getTimeStamper()
     {
         if (!isset(self::$stamper))
@@ -64,30 +67,25 @@ class CompositeLogger implements LoggerInterface
         return self::$stamper;
     }
 
-    private static $selectorAll;
     public static function getSelectorAll()
     {
-        if (!isset(self::$selectorAll))
-        {
-            self::$selectorAll = function (/** @noinspection PhpUnusedParameterInspection */
-                $message)
-                {
-                    return true;
-                };
-        }
-        return self::$selectorAll;
+        return function (/** @noinspection PhpUnusedParameterInspection */
+            $message)
+            {
+                return true;
+            };
     }
 
-    private static $selectorLevelCritical;
     public static function getSelectorLevelCritical()
     {
-        if (!isset(self::$selectorLevelCritical))
-        {
-            self::$selectorLevelCritical = function ($message)
-                {
-                    return isset($message['level']) && $message['level'] === 'critical';
-                };
-        }
-        return self::$selectorLevelCritical;
+        return self::getSelectorLevel(['critical']);
+    }
+
+    public static function getSelectorLevel(array $levels)
+    {
+        return function ($message) use ($levels)
+            {
+                return isset($message['level']) && in_array($message['level'], $levels);
+            };
     }
 }
