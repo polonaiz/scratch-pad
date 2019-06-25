@@ -9,7 +9,10 @@ class FileLoggerTest extends TestCase
     public function testLog()
     {
         $filename = '/tmp/test';
-        unlink($filename);
+        if(file_exists($filename))
+        {
+            unlink($filename);
+        }
 
         $logger = new FileLogger([
             'filename' => $filename

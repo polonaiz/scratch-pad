@@ -11,6 +11,8 @@ class LineNotifyLoggerTest extends TestCase
      */
     public function testLog()
     {
+        $this->markTestSkipped();
+
         $logger = new LineNotifyLogger([
             'token' => 'Y37YRSsvorinMUiuPNXGb7XE9Ha1fBnLjQUkzXRdiDg'
         ]);
