@@ -10,6 +10,8 @@ use Thrift\Transport\TSocket;
 
 class ScribeLogger implements LoggerInterface
 {
+    use LoggerImpl;
+
     private $host = 'localhost';
     private $port = 1463;
     private $category = 'scribe-logger-default-category';

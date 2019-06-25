@@ -4,6 +4,8 @@ namespace ScratchPad\Logger;
 
 class CompositeLogger implements LoggerInterface
 {
+    use LoggerImpl;
+
     /**
      * @var array
      */
@@ -52,6 +54,7 @@ class CompositeLogger implements LoggerInterface
             }
         }
     }
+
 
     private static $stamper;
 

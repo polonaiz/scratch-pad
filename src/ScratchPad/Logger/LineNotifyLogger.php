@@ -4,6 +4,8 @@ namespace ScratchPad\Logger;
 
 class LineNotifyLogger implements LoggerInterface
 {
+    use LoggerImpl;
+
     private $config;
 
     public function __construct($config = [])

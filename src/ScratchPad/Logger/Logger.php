@@ -31,36 +31,26 @@ class Logger
 
     public static function info(array $message)
     {
-        $mergedMessage['level'] = 'info';
-        $mergedMessage += $message;
-        self::log($mergedMessage);
+        self::$logger->info($message);
     }
 
     public static function notice(array $message)
     {
-        $mergedMessage['level'] = 'notice';
-        $mergedMessage += $message;
-        self::log($mergedMessage);
+        self::$logger->notice($message);
     }
 
     public static function warning(array $message)
     {
-        $mergedMessage['level'] = 'warning';
-        $mergedMessage += $message;
-        self::log($mergedMessage);
+        self::$logger->warning($message);
     }
 
     public static function error(array $message)
     {
-        $mergedMessage['level'] = 'error';
-        $mergedMessage += $message;
-        self::log($mergedMessage);
+        self::$logger->error($message);
     }
 
     public static function critical(array $message)
     {
-        $mergedMessage['level'] = 'critical';
-        $mergedMessage += $message;
-        self::log($mergedMessage);
+        self::$logger->critical($message);
     }
 }
