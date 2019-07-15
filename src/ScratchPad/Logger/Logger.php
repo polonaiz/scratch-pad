@@ -24,11 +24,6 @@ class Logger
         return self::$logger;
     }
 
-    private static function log(array $message)
-    {
-        self::$logger->log($message);
-    }
-
     public static function info(array $message)
     {
         self::$logger->info($message);
