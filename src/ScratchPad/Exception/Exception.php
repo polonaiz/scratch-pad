@@ -16,6 +16,21 @@ class Exception
         );
     }
 
+    public static function registerErrorHandlerToShutdownFunction(callable $callable)
+    {
+        register_shutdown_function
+        (
+            function () use ($callable)
+            {
+                $error = error_get_last();
+                if (isset($error))
+                {
+                    $callable();
+                }
+            }
+        );
+    }
+
     /**
      * @param $e \Exception
      * @return array|string
