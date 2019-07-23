@@ -25,7 +25,7 @@ class Exception
                 $error = error_get_last();
                 if (isset($error))
                 {
-                    $callable();
+                    $callable($error);
                 }
             }
         );
