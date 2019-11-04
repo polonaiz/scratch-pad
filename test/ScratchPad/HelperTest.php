@@ -9,50 +9,81 @@ class HelperTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testExecuteWithRetry()
+    public function testExecuteWithRetryNormalCase()
     {
+        //
+        $tryCount = null;
+        $normalTask = function ($context) use (&$tryCount)
+            {
+                $tryCount = $context['tryCount'];
+            };
+
+        //
         Helper::executeWithRetry([
-            'maxTryCount' => 5,
-            'onTry' => function ($context) {
-                echo json_encode(['type' => 'onTry', 'context' => $context]) . PHP_EOL;
-                if ($context['tryCount'] < 3)
-                {
-                    throw new \Exception('need more try');
-                }
-            },
-            'onCatch' => function ($context) {
-                echo json_encode(['type' => 'onCatch', 'context' => $context]) . PHP_EOL;
-            },
-            'onRetrySuccess' => function ($context) {
-                echo json_encode(['type' => 'onRetrySuccess', 'context' => $context]) . PHP_EOL;
-            },
+            'onTry' => $normalTask
         ]);
 
-        try
-        {
-            Helper::executeWithRetry([
-                'maxTryCount' => 2,
-                'onTry' => function ($context) {
-                    echo json_encode(['type' => 'onTry', 'context' => $context]) . PHP_EOL;
-                    if ($context['tryCount'] < 3)
-                    {
-                        throw new \Exception('need more try');
-                    }
-                },
-                'onCatch' => function ($context) {
-                    echo json_encode(['type' => 'onCatch', 'context' => $context]) . PHP_EOL;
-                },
-                'onRetrySuccess' => function ($context) {
-                    echo json_encode(['type' => 'onRetrySuccess', 'context' => $context]) . PHP_EOL;
-                },
-            ]);
-            throw new \Exception("ExceptionExpected");
-        }
-        catch (\Exception $e)
-        {
-            echo json_encode(['type' => 'FinallyFailed']) . PHP_EOL;
-        }
+        //
+        $this->assertEquals(1, $tryCount);
+    }
 
-        $this->assertTrue(true);
+    /**
+     * @throws \Exception
+     */
+    public function testExecuteWithRetry2()
+    {
+        //
+        $tryCount = null;
+        $underThirdTryFailingTask = function ($context) use (&$tryCount)
+            {
+                $tryCount = $context['tryCount'];
+                if ($tryCount < 3)
+                {
+                    throw new \Exception("need more try: current try count : {$tryCount}");
+                }
+            };
+
+        //
+        Helper::executeWithRetry([
+            'onTry' => $underThirdTryFailingTask,
+            'maxTryCount' => 5
+        ]);
+
+        $this->assertEquals(3, $tryCount);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testExecuteWithDelayedRetry()
+    {
+        //
+        $tryCount = null;
+        $initialTime = \time();
+        $task = function ($context) use (&$initialTime, &$tryCount)
+            {
+                $tryCount = $context['tryCount'];
+
+                $time = \time();
+                if ($initialTime + 2 > $time)
+                {
+                    throw new \Exception(\json_encode([
+                        'type' => 'tryLater',
+                        'context' => $context
+                    ]));
+                }
+            };
+
+        //
+        Helper::executeWithRetry([
+            'onTry' => $task,
+            'onCatch' => function ()
+                {
+                    usleep(1000000);
+                },
+            'maxTryCount' => 10
+        ]);
+
+        $this->assertEquals(3, $tryCount);
     }
 }

@@ -11,10 +11,10 @@ class Helper
      */
     public static function executeWithRetry($param = [])
     {
-        $maxTryCount = $param['maxTryCount'];
+        $maxTryCount = $param['maxTryCount'] ?? 1;
         $onTry = $param['onTry'];
-        $onCatch = $param['onCatch'];
-        $onRetrySuccess = $param['onRetrySuccess'];
+        $onCatch = $param['onCatch'] ?? null;
+        $onRetrySuccess = $param['onRetrySuccess'] ?? null;
 
         $tryCount = 0;
         $context = [
@@ -27,7 +27,7 @@ class Helper
             try
             {
                 $result = $onTry($context);
-                if($tryCount > 1)
+                if($tryCount > 1 && isset($onRetrySuccess))
                 {
                     $onRetrySuccess($context);
                 }
@@ -37,7 +37,10 @@ class Helper
             {
                 if ($tryCount < $maxTryCount)
                 {
-                    $onCatch($context);
+                    if(isset($onCatch))
+                    {
+                        $onCatch($context);
+                    }
                     continue;
                 }
                 throw $e;
