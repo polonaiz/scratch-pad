@@ -2,6 +2,7 @@
 
 namespace ScratchPad\Logger;
 
+use ScratchPad\Retry;
 use Scribe\LogEntry;
 use Scribe\scribeClient;
 use Thrift\Protocol\TBinaryProtocolAccelerated;
@@ -12,9 +13,7 @@ class ScribeLogger implements LoggerInterface
 {
     use LoggerImpl;
 
-    private $host = 'localhost';
-    private $port = 1463;
-    private $category = 'scribe-logger-default-category';
+    private $config;
 
     /** @var scribeClient */
     private $client = null;
@@ -24,52 +23,54 @@ class ScribeLogger implements LoggerInterface
 
     public function __construct(array $config = [])
     {
-        if (isset($config['host'])) $this->host = $config['host'];
-        if (isset($config['port'])) $this->port = $config['port'];
-        if (isset($config['category'])) $this->category = $config['category'];
-    }
-
-    private function reopenSession()
-    {
-        $this->closeSession();
-
-        $socket = new TSocket($this->host, $this->port, TRUE);
-        $this->transport = new TFramedTransport($socket);
-        $protocol = new TBinaryProtocolAccelerated($this->transport, FALSE, FALSE);
-        $this->client = new scribeClient($protocol, $protocol);
-        $this->transport->open();
-    }
-
-    private function closeSession()
-    {
-        if (isset($this->client))
-        {
-            $this->transport->close();
-            $this->client = null;
-        }
+        $this->config = $config;
     }
 
     /**
      * @param array $message
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function log(array $message)
     {
-        try
-        {
-            $this->reopenSession();
-            $this->client->Log(
-                [
-                    new LogEntry([
-                        'category' => $this->category,
-                        'message' => json_encode($message, JSON_UNESCAPED_UNICODE)
-                    ]),
-                ]);
-        }
-        catch (\Exception $e)
-        {
-            throw $e;
-        }
+        Retry::execute([
+            'onExecute' => function ($context) use (&$message)
+                {
+                    if (!isset($this->client))
+                    {
+                        $host = $this->config['host'] ?? 'localhost';
+                        $port = $this->config['port'] ?? 1463;
+                        $socket = new TSocket($host, $port, TRUE);
+                        $transport = new TFramedTransport($socket);
+                        $protocol = new TBinaryProtocolAccelerated($this->transport, FALSE, FALSE);
+                        $client = new scribeClient($protocol, $protocol);
+                        $transport->open();
+
+                        $this->transport = $transport;
+                        $this->client = $client;
+                    }
+
+                    $this->client->Log([
+                        new LogEntry([
+                            'category' => $this->config['category'],
+                            'message' => json_encode($message, JSON_UNESCAPED_UNICODE)
+                        ])
+                    ]);
+                },
+            'onFail' => function ($throwable, $context)
+                {
+                    // cleanup
+                    if (isset($this->client))
+                    {
+                        $this->transport->close();
+                        $this->transport = null;
+                        $this->client = null;
+                    }
+
+                    // wait
+                    sleep(rand(3, 5));
+                },
+            'maxExecutionCount' => 3,
+        ]);
     }
 }
 
