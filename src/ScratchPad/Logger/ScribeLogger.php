@@ -41,7 +41,7 @@ class ScribeLogger implements LoggerInterface
                         $port = $this->config['port'] ?? 1463;
                         $socket = new TSocket($host, $port, TRUE);
                         $transport = new TFramedTransport($socket);
-                        $protocol = new TBinaryProtocolAccelerated($this->transport, FALSE, FALSE);
+                        $protocol = new TBinaryProtocolAccelerated($transport, FALSE, FALSE);
                         $client = new scribeClient($protocol, $protocol);
                         $transport->open();
 
