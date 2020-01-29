@@ -8,7 +8,7 @@ class MemoryLogger implements LoggerInterface
 
     public $logs = [];
 
-    public function log(array $message)
+    public function log(array $message, array $option = [])
     {
         $this->logs[] = $message;
     }

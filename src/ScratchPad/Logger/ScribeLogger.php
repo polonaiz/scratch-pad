@@ -28,9 +28,10 @@ class ScribeLogger implements LoggerInterface
 
     /**
      * @param array $message
+	 * @param array $option
      * @throws \Throwable
      */
-    public function log(array $message)
+    public function log(array $message, array $option = [])
     {
         Retry::execute([
             'onExecute' => function ($context) use (&$message)

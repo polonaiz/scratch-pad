@@ -13,11 +13,18 @@ class ConsoleLogger implements LoggerInterface
         $this->config = $config;
     }
 
-    public function log(array $message)
+    public function log(array $message, array $option = [])
     {
-        $appendNewLine = $this->config['appendNewLine'] ?? 0;
+        $appendNewLine = $option['appendNewLine'] ?? $this->config['appendNewLine'] ?? 0;
+        $format = $option['format'] ?? $this->config['format'] ?? 'compact';
 
-        echo json_encode($message, JSON_UNESCAPED_UNICODE) . "\n";
+        $options = JSON_UNESCAPED_UNICODE;
+        if($format === 'pretty')
+		{
+			$options |= JSON_PRETTY_PRINT;
+		}
+
+        echo json_encode($message, $options) . "\n";
         if($appendNewLine > 0)
         {
             echo str_repeat("\n", $appendNewLine);

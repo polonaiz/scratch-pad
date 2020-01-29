@@ -25,7 +25,7 @@ class CompositeLogger implements LoggerInterface
         $this->config = $config;
     }
 
-    public function log(array $message)
+    public function log(array $message, array $option = [])
     {
         //
         $mergedMessage = $this->config['defaults'];

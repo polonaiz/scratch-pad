@@ -15,9 +15,10 @@ class LineNotifyLogger implements LoggerInterface
 
     /**
      * @param array $message
+	 * @param array $option
      * @throws \Exception
      */
-    public function log(array $message)
+    public function log(array $message, array $option = [])
     {
         $url = "https://notify-api.line.me/api/notify";
         $token = $this->config['token'] ?? null;

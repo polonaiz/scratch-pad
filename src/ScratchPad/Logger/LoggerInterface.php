@@ -4,16 +4,16 @@ namespace ScratchPad\Logger;
 
 interface LoggerInterface
 {
-    public function log(array $message);
+    public function log(array $message, array $option = []);
 
-    public function info(array $message);
+    public function info(array $message, array $option = []);
 
-    public function notice(array $message);
+    public function notice(array $message, array $option = []);
 
-    public function warning(array $message);
+    public function warning(array $message, array $option = []);
 
-    public function error(array $message);
+    public function error(array $message, array $option = []);
 
-    public function critical(array $message);
+    public function critical(array $message, array $option = []);
 
 }

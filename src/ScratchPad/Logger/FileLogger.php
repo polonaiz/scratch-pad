@@ -21,7 +21,7 @@ class FileLogger implements LoggerInterface
         }
     }
 
-    public function log(array $message)
+    public function log(array $message, array $option = [])
     {
         \file_put_contents(
             $this->config['filename'],
