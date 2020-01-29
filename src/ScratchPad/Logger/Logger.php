@@ -24,28 +24,28 @@ class Logger
         return self::$logger;
     }
 
-    public static function info(array $message)
+    public static function info(array $message, array $option = [])
     {
-        self::$logger->info($message);
+        self::$logger->info($message, $option);
     }
 
-    public static function notice(array $message)
+    public static function notice(array $message, array $option = [])
     {
-        self::$logger->notice($message);
+        self::$logger->notice($message, $option);
     }
 
-    public static function warning(array $message)
+    public static function warning(array $message, array $option = [])
     {
-        self::$logger->warning($message);
+        self::$logger->warning($message, $option);
     }
 
-    public static function error(array $message)
+    public static function error(array $message, array $option = [])
     {
-        self::$logger->error($message);
+        self::$logger->error($message, $option);
     }
 
-    public static function critical(array $message)
+    public static function critical(array $message, array $option = [])
     {
-        self::$logger->critical($message);
+        self::$logger->critical($message, $option);
     }
 }
