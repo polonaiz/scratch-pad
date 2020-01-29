@@ -32,4 +32,11 @@ class ConsoleLoggerTest extends TestCase
 		]);
 		$this->assertTrue(true);
 	}
+
+	public function testLogger()
+	{
+		Logger::setLogger(new ConsoleLogger());
+		Logger::info(['type' => 'test1', 'key' => 'value'], ['format'=>'pretty', 'appendNewLine'=>1]);
+		Logger::info(['type' => 'test2', 'key' => 'value'], ['format'=>'pretty', 'appendNewLine'=>1]);
+	}
 }

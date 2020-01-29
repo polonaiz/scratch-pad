@@ -50,7 +50,7 @@ class CompositeLogger implements LoggerInterface
             $filter = $loggerFilterPair['filter'];
             if ($filter($mergedMessage))
             {
-                $logger->log($mergedMessage);
+                $logger->log($mergedMessage, $option);
             }
         }
     }
