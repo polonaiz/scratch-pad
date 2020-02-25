@@ -11,8 +11,8 @@ class Throwable
     public static function getTraceSafe(\Throwable $t)
     {
         /** @noinspection PhpUnusedLocalVariableInspection */
-        $jsonTrace = json_encode($t->getTrace());
-        $jsonError = json_last_error();
+        $jsonTrace = \json_encode($t->getTrace());
+        $jsonError = \json_last_error();
         $trace = ($jsonError === JSON_ERROR_NONE) ?
             $t->getTrace() :
             $t->getTraceAsString();

@@ -24,10 +24,10 @@ class ConsoleLogger implements LoggerInterface
 			$options |= JSON_PRETTY_PRINT;
 		}
 
-        echo json_encode($message, $options) . "\n";
+        echo \json_encode($message, $options) . "\n";
         if($appendNewLine > 0)
         {
-            echo str_repeat("\n", $appendNewLine);
+            echo \str_repeat("\n", $appendNewLine);
         }
     }
 }
