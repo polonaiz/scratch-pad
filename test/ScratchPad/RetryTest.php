@@ -99,7 +99,7 @@ class RetryTest extends TestCase
                 },
             'onFail' => function (\Throwable $throwable, $context)
                 {
-                    usleep(1000000);
+                    \usleep(1000000);
                 },
             'maxExecutionCount' => 10
         ]);
