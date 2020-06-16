@@ -14,6 +14,7 @@ class Retry
         $maxExecutionCount = $param['maxExecutionCount'] ?? 1;
         $onExecute = $param['onExecute'];
         $onFail = $param['onFail'] ?? null;
+		$onRetrySuccess = $param['onRetrySuccess'] ?? null;
 
         $executionCount = 0;
         $context = [

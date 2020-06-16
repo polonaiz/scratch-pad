@@ -49,9 +49,12 @@ class RetryTest extends TestCase
     {
         //
         $executionCount = 0;
+		$failCount = 0;
+		$retrySuccess = null;
 
         //
         Retry::execute([
+			'maxExecutionCount' => 5,
             'onExecute' => function ($context) use (&$executionCount)
                 {
                     $executionCount++;
@@ -69,10 +72,19 @@ class RetryTest extends TestCase
                         ]));
                     }
                 },
-            'maxExecutionCount' => 5
+			'onFail' => function ($context) use (&$failCount)
+				{
+					$failCount++;
+				},
+			'onRetrySuccess' => function ($context) use (&$retrySuccess)
+				{
+					$retrySuccess = true;
+				},
         ]);
 
         $this->assertEquals(3, $executionCount);
+        $this->assertEquals(2, $failCount);
+        $this->assertTrue($retrySuccess);
     }
 
     /**
