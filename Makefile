@@ -24,12 +24,14 @@ composer-install-in-runtime:
 	docker run --rm -it \
 		-v $(shell pwd):/opt/project \
 		-v ~/.composer:/root/.composer \
+		-u ${shell id -u}:${shell id -g} \
  		${RUNTIME_TAG} composer -vvv install -d /opt/project
 
 composer-update-in-runtime:
 	docker run --rm -it \
 		-v $(shell pwd):/opt/project \
 		-v ~/.composer:/root/.composer \
+		-u ${shell id -u}:${shell id -g} \
  		${RUNTIME_TAG} composer -vvv update -d /opt/project
 
 composer-clean:
