@@ -68,9 +68,9 @@ class ScribeLogger implements LoggerInterface
                     }
 
                     // wait
-                    sleep(rand(3, 5));
+                    sleep(rand($this->config['retryWaitMin'] ?? 3, $this->config['retryWaitMax'] ?? 5));
                 },
-            'maxExecutionCount' => 3,
+            'maxExecutionCount' => $this->config['retryMaxCount'] ?? 3,
         ]);
     }
 }

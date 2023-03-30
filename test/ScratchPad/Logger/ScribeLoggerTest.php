@@ -14,7 +14,11 @@ class ScribeLoggerTest extends TestCase
         try
         {
             $logger = new ScribeLogger([
-                'category' => 'test'
+                'host' => '172.17.0.1',
+                'category' => 'test',
+                'retryWaitMin' => 1,
+                'retryWaitMax' => 1,
+                'retryMaxCount' => 3,
             ]);
             $logger->info(['type' => 'test']);
         }
